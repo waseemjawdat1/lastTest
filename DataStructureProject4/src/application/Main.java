@@ -20,6 +20,7 @@ public class Main extends Application {
 			MovieManagement manage = new MovieManagement();
 			primaryStage.setScene(manage.getMovieScene());
 			primaryStage.show();
+			// now i want to test commit
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
