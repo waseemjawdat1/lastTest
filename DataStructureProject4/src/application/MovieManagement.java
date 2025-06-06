@@ -4,6 +4,8 @@ package application;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -142,6 +144,8 @@ public MovieManagement() {
 			
 			Main.tableMovie.add(m);
 			Main.hash.insert(m);
+			search.clear();
+			movieTable.setItems(Main.tableMovie);
 			Alert addedMovie = new Alert (AlertType.INFORMATION);
 			addedMovie.setHeaderText(null);
 			addedMovie.setTitle("Movie Added");
@@ -267,6 +271,8 @@ public MovieManagement() {
 			movieTable.refresh();
 			if (isRemoved)
 			Main.hash.insert(m);
+			search.clear();
+			movieTable.setItems(Main.tableMovie);
 			Alert updatedMovie = new Alert (AlertType.INFORMATION);
 			updatedMovie.setHeaderText(null);
 			updatedMovie.setTitle("Movie Updated");
@@ -310,7 +316,8 @@ public MovieManagement() {
 		}
 		MovieCatalog.earseByTitle(title);
 		Main.tableMovie.remove(m);
-		
+		search.clear();
+		movieTable.setItems(Main.tableMovie);
 		Alert movieDeleted = new Alert (AlertType.INFORMATION);
 		movieDeleted.setHeaderText(null);
 		movieDeleted.setTitle("Movie deleted");
@@ -336,6 +343,45 @@ public MovieManagement() {
 	
 	byTitle.setToggleGroup(g);
 	byYear.setToggleGroup(g);
+	search.setOnKeyTyped(e->{
+		if (g.getSelectedToggle() == null) {
+			notValid("Select Search Mode");
+			return;
+		}
+		else {
+			ObservableList <Movie> temp = FXCollections.observableArrayList();
+			if (byTitle.isSelected()) {
+				String a = search.getText();
+				for (int i = 0 ; i < Main.tableMovie.size(); i++) {
+					if (Main.tableMovie.get(i).getTitle().toLowerCase().startsWith(a.toLowerCase())) {
+						temp.add(Main.tableMovie.get(i));
+					}
+				}
+			}
+			else {
+				String a = search.getText();
+				int year = -1;
+				try {
+					year = Integer.parseInt(a);
+				}catch (Exception exc) {
+					
+				}
+				if (year < 1900 || year > Calendar.getInstance().get(Calendar.YEAR)) {
+					notValid ("Enter a valid year");
+					return;
+				}
+				for (int i = 0 ; i < Main.tableMovie.size(); i++) {
+					if (Main.tableMovie.get(i).getReleaseYear() == year) {
+						temp.add(Main.tableMovie.get(i));
+					}
+				}
+			}
+			if (temp.size() > 0) {
+				movieTable.setItems(temp);
+			}
+			else movieTable.setItems(Main.tableMovie);
+		}
+	});
 	
 	HBox radios = new HBox (5 , byTitle , byYear);
 	HBox allSearch = new HBox (10 , searchBox , radios);
