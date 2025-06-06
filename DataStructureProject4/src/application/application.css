@@ -1,1 +1,46 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+/* ========== MenuBar ========== */
+.menu-bar {
+    -fx-background-color: linear-gradient(to right, #D6BBFC, #C084FC);
+    -fx-padding: 8px;
+    -fx-border-color: #B794F4;
+    -fx-border-width: 0 0 2px 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 4, 0, 0, 2);
+}
+
+/* ========== Top-Level Menus (e.g., "Movie") ========== */
+.menu {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-color: transparent;
+}
+
+/* Hover on top-level menu */
+.menu:hover {
+    -fx-background-color: #B794F4;
+}
+
+/* ========== MenuItem Default ========== */
+.menu-item {
+    -fx-font-size: 13px;
+    -fx-text-fill: #222222;
+    -fx-background-color: #f9f9f9;
+    -fx-padding: 8px 16px;
+    -fx-font-weight: bold;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+/* ========== MenuItem Hover ========== */
+.menu-item:hover {
+    -fx-background-color: #C084FC;
+    -fx-text-fill: white;
+}
+
+/* ========== Disabled MenuItem ========== */
+.menu-item:disabled {
+    -fx-text-fill: #999999;
+    -fx-background-color: #f0f0f0;
+    -fx-opacity: 1.0; /* prevent default fade */
+    -fx-font-style: italic;
+}

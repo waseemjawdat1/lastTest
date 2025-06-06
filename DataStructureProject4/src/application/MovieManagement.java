@@ -40,9 +40,10 @@ private Label searchL;
 private RadioButton byTitle, byYear;
 private VBox all;
 private MenuItem readFromFile =new ReadAndSaveToFile().getRead();
+private MenuItem saveToFile = new ReadAndSaveToFile().getSave();
 private MenuBar menu;
 private Menu file , movie;
-private MenuItem addMovie, updateMovie, deleteMovie;
+private MenuItem addMovie, updateMovie, deleteMovie , sortMovies;
 private Scene movieScene;
 Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
@@ -56,17 +57,19 @@ public MovieManagement() {
 	releaseYearCol = new TableColumn<Movie, Integer>("Release Year");
 	releaseYearCol.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
 	ratingCol = new TableColumn<Movie, Double> ("Rating");
-	ratingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
+	ratingCol.setCellValueFactory(new PropertyValueFactory<>("rate"));
 	
 	movieTable.getColumns().addAll(titleCol , descriptionCol , releaseYearCol , ratingCol);
 	movieTable.setItems(Main.tableMovie);
-	
+	movieTable.setMinHeight(500);
+	movieTable.setMaxWidth(1250);
+	movieTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	String style = "-fx-background-color: #E5D9F2;-fx-border-color: #A294F9; -fx-text-fill: black;-fx-font-family: 'Montserrat'; ";
 	for (int i = 0 ; i < movieTable.getColumns().size(); i++) {
 		movieTable.getColumns().get(i).setStyle(style);
 		movieTable.getColumns().get(i).setSortable(false);
 	}
-	add = new MyButton ("Add Movie").getB1();
+	add = new MyButton ("Add Movie",2).getB1();
 	add.setOnAction(e->{
 		Label titleL = new StandardLabel("Title : ").getL();
 		TextField title1 = new MyTextField().getT();
@@ -83,8 +86,8 @@ public MovieManagement() {
 		g.setHgap(10);
 		g.setAlignment(Pos.CENTER);
 		
-		Button add = new MyButton ("Add",1).getB1();
-		Button clear = new MyButton ("Clear",1).getB1();
+		Button add = new MyButton ("Add",2).getB1();
+		Button clear = new MyButton ("Clear",2).getB1();
 		
 		clear.setOnAction(ee->{
 			title1.clear();
@@ -99,7 +102,7 @@ public MovieManagement() {
 				notValid("Title is empty");
 				return;
 			}
-			if (Main.hash.searchByTitle(title)) {
+			if (MovieCatalog.searchByTitle(title)) {
 				notValid("There are a movie with this title");
 				return;
 			}
@@ -174,7 +177,7 @@ public MovieManagement() {
 			notValid("Search Field is empty , fill the title");
 			return;
 		}
-		Movie m = Main.hash.getByTitle(title);
+		Movie m = MovieCatalog.getByTitle(title);
 		if (m == null) {
 			notValid("No movie with this title");
 			return;
@@ -198,8 +201,8 @@ public MovieManagement() {
 		g.setHgap(10);
 		g.setAlignment(Pos.CENTER);
 		
-		Button update = new MyButton ("Update",1).getB1();
-		Button clear = new MyButton ("Clear",1).getB1();
+		Button update = new MyButton ("Update",2).getB1();
+		Button clear = new MyButton ("Clear",2).getB1();
 		
 		clear.setOnAction(ee->{
 			title1.clear();
@@ -208,16 +211,19 @@ public MovieManagement() {
 			rating1.clear();
 		});
 		
+		Stage updateStage = new Stage();
 		update.setOnAction(ee->{
 			String title2 = title1.getText();
 			if (title2 == null || title2.isEmpty()) {
 				notValid("Title is empty");
 				return;
 			}
-			if (!title.equals(title2)) {
-				Main.hash.deleteByTitle(title);
+			boolean isRemoved = false;
+			if (!title.toLowerCase().equals(title2.toLowerCase())) {
+				MovieCatalog.earseByTitle(title);
+				isRemoved = true;
 			}
-			if (Main.hash.searchByTitle(title2)) {
+			if (MovieCatalog.searchByTitle(title2)) {
 				notValid("There are a movie with this title");
 				return;
 			}
@@ -258,7 +264,8 @@ public MovieManagement() {
 			m.setDescription(description);
 			m.setRate(rating);
 			m.setReleaseYear(year);
-			Main.tableMovie.add(m);
+			movieTable.refresh();
+			if (isRemoved)
 			Main.hash.insert(m);
 			Alert updatedMovie = new Alert (AlertType.INFORMATION);
 			updatedMovie.setHeaderText(null);
@@ -269,6 +276,7 @@ public MovieManagement() {
 			i.setFitWidth(50);
 			updatedMovie.setGraphic(i);
 			updatedMovie.showAndWait();
+			updateStage.close();
 		});
 		VBox allUpdate = new VBox (10);
 		HBox h = new HBox (10);
@@ -277,9 +285,8 @@ public MovieManagement() {
 		
 		allUpdate.getChildren().addAll(g,h);
 		allUpdate.setAlignment(Pos.CENTER);
-		
 		Scene updateScene = new Scene (allUpdate , 600 , 600);
-		Stage updateStage = new Stage();
+	
 		updateStage.setScene(updateScene);
 		updateStage.setTitle("Update Movie Stage");
 		updateStage.show();
@@ -296,12 +303,12 @@ public MovieManagement() {
 			notValid("Title is empty , fill in search field");
 			return;
 		}
-		Movie m = Main.hash.getByTitle(title);
+		Movie m = MovieCatalog.getByTitle(title);
 		if (m == null) {
 			notValid("No movie with this title");
 			return;
 		}
-		Main.hash.deleteByTitle(title);
+		MovieCatalog.earseByTitle(title);
 		Main.tableMovie.remove(m);
 		
 		Alert movieDeleted = new Alert (AlertType.INFORMATION);
@@ -336,13 +343,14 @@ public MovieManagement() {
 	
 	menu = new MenuBar();
 	file = new Menu ("File");
-	file.getItems().add(readFromFile);
+	file.getItems().addAll(readFromFile , saveToFile);
 	movie = new Menu ("Movie");
 	menu.getMenus().addAll(file , movie);
 	addMovie = new MenuItem("Add Movie");
 	updateMovie = new MenuItem ("Update Movie");
 	deleteMovie = new MenuItem ("Delete Movie");
-	movie.getItems().addAll(addMovie , updateMovie , deleteMovie);
+	sortMovies = new MenuItem("Sort Movie");
+	movie.getItems().addAll(addMovie , updateMovie , deleteMovie ,sortMovies);
 	addMovie.setOnAction(e->{
 		add.fire();
 	});
@@ -352,12 +360,21 @@ public MovieManagement() {
 	deleteMovie.setOnAction(e->{
 		delete.fire();
 	});
-	
-	all = new VBox (10);
+	sortMovies.setOnAction(e->{
+		if (Main.tableMovie.size() == 0 ) {
+			MovieManagement.notValid("No Movies");
+			return;
+		}
+		System.out.println(Main.tableMovie.size());
+		System.out.println(Main.hash.getSize());
+		new SortMovies().getSortStage().show();
+	});
+	all = new VBox (40);
 	all.getChildren().addAll(menu, allSearch , buttons , movieTable);
-	all.setAlignment(Pos.CENTER);
+	all.setAlignment(Pos.TOP_CENTER);
 	
 	movieScene = new Scene(all, screenBounds.getWidth(), screenBounds.getHeight() - 15);
+	movieScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 	
 }

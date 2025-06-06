@@ -13,17 +13,13 @@ import javafx.scene.layout.BorderPane;
 public class Main extends Application {
 	static Stage primaryStage = new Stage();
 	static ObservableList<Movie> tableMovie = FXCollections.observableArrayList();
-	static HashTableMovie hash = new HashTableMovie();
+	static HashTable<Movie> hash = new HashTable<Movie>();
 	@Override
 	public void start(Stage primaryStage1) {
 		try {
 			MovieManagement manage = new MovieManagement();
 			primaryStage.setScene(manage.getMovieScene());
 			primaryStage.show();
-			// now i want to test commit
-			// another test
-			//Last Test
-			// hah another
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
