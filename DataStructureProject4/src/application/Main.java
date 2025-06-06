@@ -7,6 +7,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
 
@@ -19,7 +20,9 @@ public class Main extends Application {
 		try {
 			MovieManagement manage = new MovieManagement();
 			primaryStage.setScene(manage.getMovieScene());
+			primaryStage.setTitle("Movie Catalog Management System");
 			primaryStage.show();
+			primaryStage.getIcons().add(new Image ("movie.png"));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

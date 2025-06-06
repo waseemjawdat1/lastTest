@@ -44,3 +44,54 @@
     -fx-opacity: 1.0; /* prevent default fade */
     -fx-font-style: italic;
 }
+
+/* ComboBox background and border */
+.combo-box {
+    -fx-background-color: linear-gradient(to right, #D6BBFC, #C084FC);
+    -fx-border-color: #B794F4;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 4 8;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+/* Arrow button */
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 6;
+}
+
+.combo-box .arrow-button:hover {
+    -fx-background-color: #C084FC;
+}
+
+/* Arrow itself */
+.combo-box .arrow {
+    -fx-background-color: #5C0D9C;
+}
+
+/* ComboBox list popup */
+.combo-box-popup .list-view {
+    -fx-background-color: #F9F5FF;
+    -fx-border-color: #B794F4;
+    -fx-border-radius: 0 0 6 6;
+    -fx-background-radius: 0 0 6 6;
+}
+
+/* ComboBox items */
+.combo-box-popup .list-cell {
+    -fx-padding: 8px 12px;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-background-color: transparent;
+}
+
+/* Hover effect on items */
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #C084FC;
+    -fx-text-fill: white;
+}
+

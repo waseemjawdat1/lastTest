@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -53,8 +54,8 @@ public class SortMovies {
 
         movieTable = new TableView<>();
         movieTable.getColumns().addAll(titleCol, descriptionCol, releaseYearCol, ratingCol);
-        movieTable.setMinHeight(500);
-        movieTable.setMaxWidth(1250);
+        movieTable.setMaxHeight(400);
+        movieTable.setMaxWidth(1100);
         movieTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         String style = "-fx-background-color: #E5D9F2;-fx-border-color: #A294F9; -fx-text-fill: black;-fx-font-family: 'Montserrat'; ";
@@ -108,21 +109,20 @@ public class SortMovies {
 
         VBox topSection = new VBox(10, hashIndex, topLabel, leastLabel, sortOptions);
         topSection.setAlignment(Pos.CENTER);
-        topSection.setPadding(new Insets(10));
 
         HBox navButtons = new HBox(20, prev, next);
         navButtons.setAlignment(Pos.CENTER);
-        navButtons.setPadding(new Insets(10));
 
-        BorderPane root = new BorderPane();
-        root.setTop(topSection);
-        root.setCenter(movieTable);
-        root.setBottom(navButtons);
+        VBox all = new VBox(10);
+        all.getChildren().addAll(topSection , movieTable,navButtons);
+        all.setAlignment(Pos.CENTER);
+        sortScene = new Scene(all, 1200, 750);
+        sortScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
-        sortScene = new Scene(root, 1300, 700);
         sortStage = new Stage();
         sortStage.setScene(sortScene);
         sortStage.setTitle("Movie Sort");
+        sortStage.getIcons().add(new Image ("movie.png"));
         sortStage.show();
     }
 
@@ -150,8 +150,8 @@ public class SortMovies {
             }
         }
 
-        topLabel.setText("🎬 Top Rated: " + (top != null ? top.getTitle() : "N/A"));
-        leastLabel.setText("📉 Least Rated: " + (least != null ? least.getTitle() : "N/A"));
+        topLabel.setText("🎬 Top Rated: " + (top != null ? top.getTitle() + " (" + top.getRate() + "/10)" : "N/A"));
+        leastLabel.setText("📉 Least Rated: " + (least != null ? least.getTitle() + " (" + least.getRate() + "/10)" : "N/A"));
     }
 
 	public Stage getSortStage() {
