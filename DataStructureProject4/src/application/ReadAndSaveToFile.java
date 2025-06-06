@@ -6,8 +6,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
 
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -52,16 +56,26 @@ public class ReadAndSaveToFile {
 		    	                Main.hash.insert(m);
 		    	                Main.tableMovie.add(m);
 		    	            } else {
-		    	                System.out.println("Duplicate: " + m.getTitle());
+		    	                System.out.println("Duplicate " + m.getTitle());
 		    	            }
 		    	        } catch (Exception err) {
-		    	            System.out.println("Error parsing movie: " + err.getMessage());
 		    	        }
 		    	    }
-
-		    	    System.out.println("ObservableList size: " + Main.tableMovie.size());
-		    	    System.out.println("Hash size (unique titles): " + Main.hash.getSize());
-		    	    System.out.println("Hash total nodes (all trees): " + Main.hash.getSz());
+		    	    
+		    	    
+		    	    Alert doneRead = new Alert (AlertType.INFORMATION);
+		    	    doneRead.setTitle("File Read");
+		    	    doneRead.setHeaderText(null);
+		    	    doneRead.setContentText("Data imported sucessfully");
+		    	    ImageView trueI = new ImageView (new Image ("truee1.png"));
+		    	    trueI.setFitHeight(50);
+		    	    trueI.setFitWidth(50);
+		    	    doneRead.setGraphic(trueI);
+		    	    doneRead.showAndWait();
+		    	    
+		    	    System.out.println("list size: " + Main.tableMovie.size());
+		    	    System.out.println("hash size: " + Main.hash.getSize());
+		    	    System.out.println("all trees size: " + Main.hash.getSz());
 
 		    	} catch (Exception ex) {
 		    	    ex.printStackTrace();
@@ -90,6 +104,15 @@ public class ReadAndSaveToFile {
 			    	}catch (Exception exc) {
 			    		
 			    	}
+			    	 Alert doneSave = new Alert (AlertType.INFORMATION);
+			    	    doneSave.setTitle("File Saved");
+			    	    doneSave.setHeaderText(null);
+			    	    doneSave.setContentText("Data exported sucessfully");
+			    	    ImageView trueI = new ImageView (new Image ("truee1.png"));
+			    	    trueI.setFitHeight(50);
+			    	    trueI.setFitWidth(50);
+			    	    doneSave.setGraphic(trueI);
+			    	    doneSave.showAndWait();
 			    }
 		});
 
