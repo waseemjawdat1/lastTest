@@ -367,7 +367,6 @@ public MovieManagement() {
 					
 				}
 				if (year < 1900 || year > Calendar.getInstance().get(Calendar.YEAR)) {
-					notValid ("Enter a valid year");
 					return;
 				}
 				for (int i = 0 ; i < Main.tableMovie.size(); i++) {
